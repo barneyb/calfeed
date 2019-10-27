@@ -2,7 +2,7 @@
 
 I'm an umbrella project for sucking in calendar information from "bad" sources,
 and aggregating it into nice iCalendar feeds. The sources don't have to be bad,
-as iCalendar itself is supported, but if you just need aggregation if iCalendar,
+as iCalendar itself is supported, but if you just need aggregation of iCalendar,
 there are better ways to go about it.
 
 You probably want to start by downloading at TSSS calendar page and then run the
@@ -18,6 +18,14 @@ given event changed (so `SEQUENCE` can be set right).
 The filename (`tsss.html` in this case) is used as the remote calendar's key,
 so you must ensure you use the same filename for successive runs of the same
 calendar _and_ that you use distinct filenames for different calendars.
+
+Once you've done that at least once, then you can generate an `.ics` file from
+one or more sources:
+
+    ./calfeed.rb generate agg.ics tsss.html
+
+List as many sources as you want after the output filename to build a custom
+aggregate.
 
 ## TSSS Schedules
 

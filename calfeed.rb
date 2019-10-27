@@ -7,7 +7,8 @@ def get_command()
       require_relative 'src/load_command'
       LoadCommand.new(rest)
     when 'generate'
-      puts "GENERATE - Not Implemented"
+      require_relative 'src/generate_command'
+      GenerateCommand.new(rest)
     else
       puts "Unknown command: '#{cmd}'"
       puts "Available commands: load, generate"

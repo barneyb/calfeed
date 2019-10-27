@@ -1,4 +1,4 @@
-= Cal Feed
+# Cal Feed
 
 I'm an umbrella project for sucking in calendar information from "bad" sources,
 and aggregating it into nice iCalendar feeds. The sources don't have to be bad,
@@ -19,7 +19,7 @@ The filename (`tsss.html` in this case) is used as the remote calendar's key,
 so you must ensure you use the same filename for successive runs of the same
 calendar _and_ that you use distinct filenames for different calendars.
 
-== TSSS Schedules
+## TSSS Schedules
 
 TSSS has the ability to publish `.ics` files, so you might think this isn't
 needed, but the feature's not available in every edition. So we fake it. Of

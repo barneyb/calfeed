@@ -37,6 +37,7 @@ class LoadCommand < Command
       cal.events.each do |e|
         old_e = old_cal.events.find { |it| it.id == e.id }
         next if !old_e
+        e.seq = old_e.seq
         [:title, :start_time, :end_time, :location, :notes].each do |prop|
           if e.send(prop) != old_e.send(prop)
             puts "Event #{e.id} had its '#{prop}' prop updated"

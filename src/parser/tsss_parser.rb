@@ -10,6 +10,7 @@ DATE      = 2
 TIME      = 3
 HOME_AWAY = 4
 OPPONENT  = 5
+FIELD     = 7
 
 class TsssParser
 
@@ -34,6 +35,7 @@ class TsssParser
       e.title = prefix + fields[OPPONENT].text
       e.start_time = DateTime.parse(fields[DATE].text + ' ' + fields[TIME].text + ' ' + @time_zone)
       e.end_time = e.start_time + EVENT_LENGTH
+      e.location = fields[FIELD].text
       e
     end
   end

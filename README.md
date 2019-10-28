@@ -5,10 +5,15 @@ and aggregating it into nice iCalendar feeds. The sources don't have to be bad,
 as iCalendar itself is supported, but if you just need aggregation of iCalendar,
 there are better ways to go about it.
 
-You probably want to start by downloading at TSSS calendar page and then run the
+The app has one dependency: the `icalendar` gem. So you need that first:
+
+    gem install icalendar
+
+You probably want to start by downloading a TSSS calendar page and then run the
 app like this-ish:
 
-    ./calfeed.rb load tsss tsss.html
+    #            cmd  parser input
+    ./calfeed.rb load tsss   tsss.html
 
 That'll create a `.m` file with the schedule's data in it. Hopefully. If you
 run the same command again with a new schedule file, the `.m` file will be
@@ -22,6 +27,7 @@ calendar _and_ that you use distinct filenames for different calendars.
 Once you've done that at least once, then you can generate an `.ics` file from
 one or more sources:
 
+    #            cmd      output  input
     ./calfeed.rb generate agg.ics tsss.html
 
 List as many sources as you want after the output filename to build a custom

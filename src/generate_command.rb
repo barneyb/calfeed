@@ -1,3 +1,6 @@
+gem 'icalendar'
+
+require 'icalendar'
 require 'time'
 
 require_relative 'command'
@@ -20,8 +23,20 @@ class GenerateCommand < Command
       all_events.concat cal.events
     end
     all_events.sort!
-    puts "All Events:"
-    all_events.each { |e| puts e }
+    ical = Icalendar::Calendar.new
+    all_events.each do |e|
+      ical.event do |ie|
+        ie.uid         = e.id.to_s
+        ie.sequence    = e.seq
+        ie.dtstart     = Icalendar::Values::DateTime.new(e.start_time)
+        ie.dtend       = Icalendar::Values::DateTime.new(e.end_time)
+        ie.summary     = e.title
+        ie.description = e.notes
+        ie.location    = e.location
+      end
+    end
+    ical.publish
+    File.open(@filename, 'w') { |io| io.puts ical.to_ical }
   end
 
 end

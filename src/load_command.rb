@@ -25,7 +25,7 @@ class LoadCommand < Command
   end
 
   def run
-    puts "load '#{@filename}' into ... somewhere ... with #{@parser}!"
+    puts "loading '#{@filename}' (with #{@parser})"
     events = File.open(@filename) do |io|
       @parser.parse(io)
     end

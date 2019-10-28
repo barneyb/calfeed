@@ -38,7 +38,7 @@ aggregate.
 TSSS has the ability to publish `.ics` files, so you might think this isn't
 needed, but the feature's not available in every edition. So we fake it. Of
 notable import, the HTML schedule pages do not provide any sort of identifier
-for a game, so the row order on the page is used, start with `1`. It's not
+for a game, so the row position in the table is used, start with `1`. It's not
 great, but it works. The consequence of this is that if you want to keep
 historical calendar information across season changes, you'll need to use a
 filename _per season_, not just per team. If you don't, the first game of

@@ -20,13 +20,17 @@ class GenerateCommand < Command
       src += '.m' if src !~ /\.m$/
       raise "No '#{src}' file?!" if !File.exist? src
       cal = File.open(src) { |io| Marshal.load io }
-      all_events.concat cal.events
+      cal.events.collect do |e|
+        all_events << {cal: cal, event: e}
+      end
     end
-    all_events.sort!
+    all_events.sort! { |a, b| a[:event] <=> b[:event] }
     ical = Icalendar::Calendar.new
-    all_events.each do |e|
+    ical.publish
+    all_events.each do |p|
+      e = p[:event]
       ical.event do |ie|
-        ie.uid         = e.id.to_s
+        ie.uid         = "#{p[:cal].name}-#{e.id}@calfeed.barneyb.com"
         ie.sequence    = e.seq
         ie.dtstart     = Icalendar::Values::DateTime.new(e.start_time)
         ie.dtend       = Icalendar::Values::DateTime.new(e.end_time)
@@ -35,8 +39,7 @@ class GenerateCommand < Command
         ie.location    = e.location
       end
     end
-    ical.publish
     File.open(@filename, 'w') { |io| io.puts ical.to_ical }
+    puts "Generated #{all_events.size} events"
   end
-
 end

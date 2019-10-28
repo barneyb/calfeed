@@ -3,7 +3,7 @@ require 'nokogiri'
 
 require_relative '../model/event'
 
-EVENT_LENGTH = 3600
+EVENT_LENGTH = Rational(1, 24) # one hour, in days
 
 # fields/columns
 DATE      = 2

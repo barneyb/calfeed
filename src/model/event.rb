@@ -8,7 +8,8 @@ class Event
   end
 
   def duration
-    (end_time - start_time).to_i
+    # minus gives days; we want seconds
+    ((end_time - start_time) * 24 * 60 * 60).to_i
   end
 
   def <=>(other)

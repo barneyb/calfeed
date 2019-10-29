@@ -1,4 +1,5 @@
 require_relative 'command'
+require_relative 'store'
 require_relative 'model/calendar'
 
 def get_parser(name, args)
@@ -33,10 +34,10 @@ class LoadCommand < Command
       @parser.parse(io)
     end
     cal = Calendar.new @filename, events
-    cache_file = @filename + '.m'
-    if File.exist? cache_file
+    store = Store.new
+    if store.exist? @filename
       # see if we need to update seq
-      old_cal = File.open(cache_file) { |io| Marshal.load io }
+      old_cal = store.retrieve_calendar @filename
       cal.events.each do |e|
         old_e = old_cal.events.find { |it| it.id == e.id }
         next if !old_e
@@ -50,7 +51,7 @@ class LoadCommand < Command
         end
       end
     end
-    File.open(cache_file, 'w') { |io| Marshal.dump cal, io }
+    store.store_calendar @filename, cal
     puts cal
   end
 

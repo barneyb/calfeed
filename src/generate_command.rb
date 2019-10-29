@@ -4,6 +4,7 @@ require 'icalendar'
 require 'time'
 
 require_relative 'command'
+require_relative 'store'
 require_relative 'model/calendar'
 require_relative 'model/event'
 
@@ -16,10 +17,11 @@ class GenerateCommand < Command
   def run
     puts "generate '#{@filename}' from #{@sources}"
     all_events = []
+    store = Store.new
     @sources.each do |src|
       src += '.m' if src !~ /\.m$/
-      raise "No '#{src}' file?!" if !File.exist? src
-      cal = File.open(src) { |io| Marshal.load io }
+      raise "No '#{src}' file?!" if !store.exist? src
+      cal = store.retrieve_calendar src
       cal.events.collect do |e|
         all_events << {cal: cal, event: e}
       end

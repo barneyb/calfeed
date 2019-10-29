@@ -5,9 +5,13 @@ and aggregating it into nice iCalendar feeds. The sources don't have to be bad,
 as iCalendar itself is supported, but if you just need aggregation of iCalendar,
 there are better ways to go about it.
 
-The app has one dependency: the `icalendar` gem. So you need that first:
+The app has two dependencies: Ruby >2.3 and the `icalendar` gem. So make sure
+you have those first:
 
-    gem install icalendar
+    $ ruby --version
+    ruby 2.3.3p222 (2016-11-21 revision 56859)
+    $ gem list | grep icalendar
+    icalendar (2.5.3)
 
 ## Usage
 

@@ -9,11 +9,29 @@ The app has one dependency: the `icalendar` gem. So you need that first:
 
     gem install icalendar
 
+## Usage
+
+The entrypoint to everything is `calfeed.rb`, which always takes a subcommand
+and usually some additional params to control it:
+
+    ./calfeed.rb <cmd> <params>
+
+The available subcommands are `load` and `generate`. The former sucks in one
+of those "bad" sources and parses it into an intermediate representation. The
+latter takes a set of loaded datasets, aggregates them, and emits and `.ics`
+file.
+
+Since the commands can get a bit unweildy - and you'll want to be running them
+from `cron` anyway - I highly recommend a "work" directory somewhere to house
+the files w/ a `run.sh` script that gathers the series of `curl`, `calfeed.rb`,
+and `rsync` commands need to actually make it useful.
+
+### Loading
+
 You probably want to start by downloading a TSSS calendar page and then run the
 app like this-ish:
 
-    #            cmd  parser input
-    ./calfeed.rb load tsss   tsss.html
+    ./calfeed.rb load tsss tsss.html
 
 That'll create a `.m` file with the schedule's data in it. Hopefully. If you
 run the same command again with a new schedule file, the `.m` file will be
@@ -24,16 +42,38 @@ The filename (`tsss.html` in this case) is used as the remote calendar's key,
 so you must ensure you use the same filename for successive runs of the same
 calendar _and_ that you use distinct filenames for different calendars.
 
+The `tsss` parser accepts an optional timezone specification after the input
+file should you wish to interpret the dates in something other than your
+system's local time.
+
+In addition to the `tsss` loader, there is also a `osaa` loader which reads
+OSAA CSV files (from osaa.org).
+
+    ./calfeed load osaa osaa.csv MySchool
+
+The school name is needed because the CSV doesn't indicate which team the CSV
+is for, just which team is home and which is away. Specifying the school name
+allows the parser to decide which games are home and away for _your school_,
+which is almost certainly what you want.
+
+The `osaa` parser also accepts an optional timezone specification after the
+school name should you wish to interpret the dates in something other than your
+system's local time. This one, however, is mostly to deal with the stupidity
+around Oregon's DST legislature (futureproofing for next fall), since it's
+unlikely to be useful for anyone outside Oregon.
+
+### Generating
+
 Once you've done that at least once, then you can generate an `.ics` file from
 one or more sources:
 
-    #            cmd      output  input
-    ./calfeed.rb generate agg.ics tsss.html
+    ./calfeed.rb generate agg.ics tsss.html osaa.csv
 
 List as many sources as you want after the output filename to build a custom
-aggregate.
+aggregate. Note that the actual source files aren't used, only their
+corresponding `.m` file (the sources are just keys).
 
-## TSSS Schedules
+## TSSS Specific Notes
 
 TSSS has the ability to publish `.ics` files, so you might think this isn't
 needed, but the feature's not available in every edition. So we fake it. Of

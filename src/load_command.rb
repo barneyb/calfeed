@@ -38,8 +38,8 @@ class LoadCommand < Command
     if store.exist? @filename
       # see if we need to update seq
       old_cal = store.retrieve_calendar @filename
-      cal.events.each do |e|
-        old_e = old_cal.events.find { |it| it.id == e.id }
+      cal.each do |e|
+        old_e = old_cal.get_event e.id
         next if !old_e
         e.seq = old_e.seq
         [:title, :start_time, :end_time, :location, :notes].each do |prop|

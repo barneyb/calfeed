@@ -22,7 +22,7 @@ class GenerateCommand < Command
       src += '.m' if src !~ /\.m$/
       raise "No '#{src}' file?!" if !store.exist? src
       cal = store.retrieve_calendar src
-      cal.events.collect do |e|
+      cal.collect do |e|
         all_events << {cal: cal, event: e}
       end
     end

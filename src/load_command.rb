@@ -11,7 +11,8 @@ def get_parser(name, args)
       require_relative 'parser/tsss_parser'
       TsssParser.new args
     when 'ical', 'ics', 'icalendar'
-      raise "Loading iCalendar isn't supported yet"
+      require_relative 'parser/ical_parser'
+      ICalParser.new args
     else
       puts "Unknown source format: '#{name}'"
       puts "Available formats: osaa, tsss"

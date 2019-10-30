@@ -66,6 +66,10 @@ system's local time. This one, however, is mostly to deal with the stupidity
 around Oregon's DST legislature (futureproofing for next fall), since it's
 unlikely to be useful for anyone outside Oregon.
 
+Finally, there's an `ical` (aliased to `ics`) parser which will read in an
+iCalendar file to be aggregated with other sources. It takes the zero-based
+index of the calendar in the `.ics` file you want to read, defaulting to zero.
+
 ### Generating
 
 Once you've done that at least once, then you can generate an `.ics` file from

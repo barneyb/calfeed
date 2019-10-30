@@ -3,18 +3,15 @@ require_relative 'store'
 require_relative 'model/calendar'
 
 def get_parser(name, args)
-  case name
+  case name.downcase
     when 'osaa'
       require_relative 'parser/osaa_parser'
-      p = OsaaParser.new
-      p.team_name = args[0] if args and args.size > 0
-      p.time_zone = args[1] if args and args.size > 1
-      p
+      OsaaParser.new args
     when 'tsss'
       require_relative 'parser/tsss_parser'
-      p = TsssParser.new
-      p.time_zone = args[0] if args and args.size > 0
-      p
+      TsssParser.new args
+    when 'ical', 'ics', 'icalendar'
+      raise "Loading iCalendar isn't supported yet"
     else
       puts "Unknown source format: '#{name}'"
       puts "Available formats: osaa, tsss"

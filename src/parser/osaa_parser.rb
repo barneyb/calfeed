@@ -9,9 +9,9 @@ class OsaaParser
 
   attr_accessor :team_name, :time_zone
 
-  def initialize(team_name=nil)
-    @team_name = team_name
-    @time_zone = Time.now.getlocal.zone
+  def initialize(args)
+    @team_name, @time_zone = args
+    @time_zone = Time.now.getlocal.zone if !@time_zone
   end
 
   def parse(io)
@@ -20,12 +20,12 @@ class OsaaParser
       fields = row.to_h
       e = Event.new fields['Contest ID'] 
       e.title = if fields['Home Team'] == @team_name
-               "vs #{fields['Away Team']}"
-             elsif fields['Away Team'] == @team_name
-               "@#{fields['Home Team']}"
-             else
-               "#{fields['Home Team']} vs #{fields['Away Team']}"
-             end
+                  "vs #{fields['Away Team']}"
+                elsif fields['Away Team'] == @team_name
+                  "@#{fields['Home Team']}"
+                else
+                  "#{fields['Home Team']} vs #{fields['Away Team']}"
+                end
       atHour = true
       ds = fields['Date'] + ' ' + fields['Time'] + ' ' + @time_zone
       e.start_time = begin

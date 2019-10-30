@@ -16,8 +16,9 @@ class TsssParser
 
   attr_accessor :time_zone
 
-  def initialize
-    @time_zone = Time.now.getlocal.zone
+  def initialize(args)
+    @time_zone = args[0] if args and args.size > 0
+    @time_zone = Time.now.getlocal.zone if !@time_zone
   end
 
   def parse(io)

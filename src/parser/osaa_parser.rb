@@ -1,17 +1,16 @@
 require 'csv'
-require 'date'
+require 'time'
 
 require_relative '../model/event'
 
-EVENT_LENGTH = Rational(1, 24) # one hour, in days
+EVENT_LENGTH = 3600 # one hour, in seconds
 
 class OsaaParser
 
-  attr_accessor :team_name, :time_zone
+  attr_accessor :team_name
 
   def initialize(args)
-    @team_name, @time_zone = args
-    @time_zone = Time.now.getlocal.zone if !@time_zone
+    @team_name = args[0] if args && args.size > 0
   end
 
   def parse(io)
@@ -27,11 +26,11 @@ class OsaaParser
                   "#{fields['Home Team']} vs #{fields['Away Team']}"
                 end
       atHour = true
-      ds = fields['Date'] + ' ' + fields['Time'] + ' ' + @time_zone
+      ds = fields['Date'] + ' ' + fields['Time']
       e.start_time = begin
-                       DateTime.strptime(
+                       Time.strptime(
                          ds,
-                         '%m/%d/%y ' + (atHour ? '%I%p' : '%I:%M%p') + ' %z'
+                         '%m/%d/%y ' + (atHour ? '%I%p' : '%I:%M%p')
                        )
                      rescue ArgumentError
                        if atHour then

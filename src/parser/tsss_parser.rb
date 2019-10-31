@@ -1,9 +1,9 @@
-require 'date'
+require 'time'
 require 'nokogiri'
 
 require_relative '../model/event'
 
-EVENT_LENGTH = Rational(1, 24) # one hour, in days
+EVENT_LENGTH = 3600 # one hour, in seconds
 
 # fields/columns
 DATE      = 2
@@ -14,11 +14,7 @@ FIELD     = 7
 
 class TsssParser
 
-  attr_accessor :time_zone
-
   def initialize(args)
-    @time_zone = args[0] if args and args.size > 0
-    @time_zone = Time.now.getlocal.zone if !@time_zone
   end
 
   def parse(io)
@@ -34,7 +30,7 @@ class TsssParser
                  when 'H' then 'vs '
                end
       e.title = prefix + fields[OPPONENT].text
-      e.start_time = DateTime.parse(fields[DATE].text + ' ' + fields[TIME].text + ' ' + @time_zone)
+      e.start_time = Time.parse(fields[DATE].text + ' ' + fields[TIME].text)
       e.end_time = e.start_time + EVENT_LENGTH
       e.location = fields[FIELD].text
       e

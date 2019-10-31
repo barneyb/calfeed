@@ -34,8 +34,8 @@ class GenerateCommand < Command
       ical.event do |ie|
         ie.uid         = "#{p[:cal].name}-#{e.id}@calfeed.barneyb.com"
         ie.sequence    = e.seq
-        ie.dtstart     = Icalendar::Values::DateTime.new(e.start_time.new_offset('-00:00'))
-        ie.dtend       = Icalendar::Values::DateTime.new(e.end_time.new_offset('-00:00'))
+        ie.dtstart     = Icalendar::Values::DateTime.new(e.start_time)
+        ie.dtend       = Icalendar::Values::DateTime.new(e.end_time)
         ie.summary     = e.title
         ie.description = e.notes
         ie.location    = e.location

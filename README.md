@@ -46,12 +46,7 @@ The filename (`tsss.html` in this case) is used as the remote calendar's key,
 so you must ensure you use the same filename for successive runs of the same
 calendar _and_ that you use distinct filenames for different calendars.
 
-The `tsss` parser accepts an optional timezone specification after the input
-file should you wish to interpret the dates in something other than your
-system's local time.
-
-In addition to the `tsss` loader, there is also a `osaa` loader which reads
-OSAA CSV files (from osaa.org).
+There is also a `osaa` loader which reads OSAA CSV files (from osaa.org):
 
     ./calfeed load osaa osaa.csv MySchool
 
@@ -60,15 +55,12 @@ is for, just which team is home and which is away. Specifying the school name
 allows the parser to decide which games are home and away for _your school_,
 which is almost certainly what you want.
 
-The `osaa` parser also accepts an optional timezone specification after the
-school name should you wish to interpret the dates in something other than your
-system's local time. This one, however, is mostly to deal with the stupidity
-around Oregon's DST legislature (futureproofing for next fall), since it's
-unlikely to be useful for anyone outside Oregon.
-
 Finally, there's an `ical` (aliased to `ics`) parser which will read in an
 iCalendar file to be aggregated with other sources. It takes the zero-based
 index of the calendar in the `.ics` file you want to read, defaulting to zero.
+If you want to import multiple calendars from the same file, duplicate the file
+`N` times (w/ `N` different names), and import each calendar from a different
+file. This is not a target use case, so "works" was the threshold, not "good".
 
 ### Generating
 

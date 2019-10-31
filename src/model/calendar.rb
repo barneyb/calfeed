@@ -23,9 +23,11 @@ class Calendar
   end
 
   def to_s
-    "#{name} (#{size} events) #{@events.find do |it|
-      it.start_time > DateTime.now
-    end}"
+    e = @events.find do |it|
+      it.start_time > Time.now
+    end
+    e = @events.max if !e
+    "#{name} (#{size} events) #{e}"
   end
 
   def marshal_dump

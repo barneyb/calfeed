@@ -19,8 +19,8 @@ class ICalParser
       e = Event.new Digest::SHA1.hexdigest(ie.uid)
       e.seq        = ie.sequence
       e.title      = ie.summary
-      e.start_time = ie.dtstart.value
-      e.end_time   = ie.dtend.value
+      e.start_time = ie.dtstart.value.to_time.utc
+      e.end_time   = ie.dtend.value.to_time.utc
       e.notes      = ie.description
       e.location   = ie.location
       e

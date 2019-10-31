@@ -20,6 +20,8 @@ def get_parser(name, args)
   end
 end
 
+DATA_PROPS = [:title, :start_time, :end_time, :location, :notes]
+
 class LoadCommand < Command
   def initialize(params)
     @parser = get_parser(params[0], params.slice(2, params.size))
@@ -40,12 +42,10 @@ class LoadCommand < Command
         old_e = old_cal.get_event e.id
         next if !old_e
         e.seq = old_e.seq
-        [:title, :start_time, :end_time, :location, :notes].each do |prop|
-          if e.send(prop) != old_e.send(prop)
-            puts "Event #{e.id} had its '#{prop}' prop updated"
-            e.seq += 1
-            break
-          end
+        mods = DATA_PROPS.find_all { |p| e.send(p) != old_e.send(p) }
+        if !mods.empty?
+          puts "Update #{e.id}: #{mods.join ', '}"
+          e.seq += 1
         end
       end
     end

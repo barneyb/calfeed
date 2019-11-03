@@ -1,6 +1,8 @@
 require 'csv'
 require 'time'
+require 'tzinfo'
 
+require_relative '../config'
 require_relative '../model/event'
 
 EVENT_LENGTH = 3600 # one hour, in seconds
@@ -14,6 +16,7 @@ class OsaaParser
   end
 
   def parse(io)
+    config = Config.instance
     csv = CSV.new(io, headers: true)
     csv.collect do |row|
       fields = row.to_h
@@ -27,19 +30,20 @@ class OsaaParser
                 end
       atHour = true
       ds = fields['Date'] + ' ' + fields['Time']
-      e.start_time = begin
-                       Time.strptime(
-                         ds,
-                         '%m/%d/%y ' + (atHour ? '%I%p' : '%I:%M%p')
-                       )
-                     rescue ArgumentError
-                       if atHour then
-                         atHour = false
-                         retry
-                       else
-                         raise
-                       end
-                     end
+      ts = begin
+             Time.strptime(
+               ds,
+               '%m/%d/%y ' + (atHour ? '%I%p' : '%I:%M%p')
+             )
+           rescue ArgumentError
+             if atHour then
+               atHour = false
+               retry
+             else
+               raise
+             end
+           end
+      e.start_time = TZInfo::Timezone.get(config.time_zone).local_to_utc(ts)
       e.end_time = e.start_time + EVENT_LENGTH
       e.location = fields['Location']
       e

@@ -1,6 +1,8 @@
-require 'time'
 require 'nokogiri'
+require 'time'
+require 'tzinfo'
 
+require_relative '../config'
 require_relative '../model/event'
 
 EVENT_LENGTH = 3600 # one hour, in seconds
@@ -18,6 +20,7 @@ class TsssParser
   end
 
   def parse(io)
+    config = Config.instance
     html = io.gets nil
     doc = Nokogiri::HTML.parse html
     i = 0
@@ -30,7 +33,8 @@ class TsssParser
                  when 'H' then 'vs '
                end
       e.title = prefix + fields[OPPONENT].text
-      e.start_time = Time.parse(fields[DATE].text + ' ' + fields[TIME].text)
+      ts = Time.parse(fields[DATE].text + ' ' + fields[TIME].text)
+      e.start_time = TZInfo::Timezone.get(config.time_zone).local_to_utc(ts)
       e.end_time = e.start_time + EVENT_LENGTH
       e.location = fields[FIELD].text
       e

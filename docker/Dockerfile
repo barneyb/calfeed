@@ -1,5 +1,5 @@
-FROM ruby:2.3
+FROM ruby:2.5
 RUN apt-get update && \
-    gem install icalendar nokogiri
+    gem install icalendar nokogiri tzinfo
 WORKDIR /data
 CMD /data/work/run.sh

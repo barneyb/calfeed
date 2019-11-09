@@ -34,8 +34,8 @@ class GenerateCommand < Command
       ical.event do |ie|
         ie.uid         = "#{p[:cal].name}-#{e.id}@calfeed.barneyb.com"
         ie.sequence    = e.seq
-        ie.dtstart     = Icalendar::Values::DateTime.new(e.start_time)
-        ie.dtend       = Icalendar::Values::DateTime.new(e.end_time)
+        ie.dtstart     = to_datetime(e.start_time)
+        ie.dtend       = to_datetime(e.end_time)
         ie.summary     = e.title
         ie.description = e.notes
         ie.location    = e.location
@@ -43,5 +43,9 @@ class GenerateCommand < Command
     end
     File.open(@filename, 'w') { |io| io.puts ical.to_ical }
     puts "Generated #{all_events.size} events"
+  end
+
+  private def to_datetime(time, tzid='UTC')
+    Icalendar::Values::DateTime.new(time, 'tzid' => tzid)
   end
 end

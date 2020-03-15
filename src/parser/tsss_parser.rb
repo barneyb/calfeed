@@ -24,7 +24,8 @@ class TsssParser
     html = io.gets nil
     doc = Nokogiri::HTML.parse html
     i = 0
-    doc.css(".itemlist")[1].css(".tritem, .trodditem").collect do |it|
+    events = []
+    doc.css(".itemlist")[1].css(".tritem, .trodditem").each do |it|
       i += 1
       fields = it.css ".tditem"
       e = Event.new i
@@ -33,11 +34,16 @@ class TsssParser
                  when 'H' then 'vs '
                end
       e.title = prefix + fields[OPPONENT].text
-      ts = Time.parse(fields[DATE].text + ' ' + fields[TIME].text)
+      begin
+        ts = Time.parse(fields[DATE].text + ' ' + fields[TIME].text)
+      rescue ArgumentError
+        next
+      end
       e.start_time = TZInfo::Timezone.get(config.time_zone).local_to_utc(ts)
       e.end_time = e.start_time + EVENT_LENGTH
       e.location = fields[FIELD].text
-      e
+      events << e
     end
+    events
   end
 end

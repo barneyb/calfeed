@@ -44,7 +44,12 @@ class LoadCommand < Command
         e.seq = old_e.seq
         mods = DATA_PROPS.find_all { |p| e.send(p) != old_e.send(p) }
         if !mods.empty?
-          puts "Update #{e.id}: #{mods.join ', '}"
+          puts "Update #{e.id}:"
+          mods.each do |p|
+            puts "  #{p}"
+            puts "  -#{old_e.send(p)}"
+            puts "  +#{e.send(p)}"
+          end
           e.seq += 1
         end
       end

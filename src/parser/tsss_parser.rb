@@ -25,7 +25,9 @@ class TsssParser
     doc = Nokogiri::HTML.parse html
     i = 0
     events = []
-    doc.css(".itemlist")[1].css(".tritem, .trodditem").each do |it|
+    sched = doc.css(".itemlist")
+    return events if sched == nil || sched.size < 2
+    sched[1].css(".tritem, .trodditem").each do |it|
       i += 1
       fields = it.css ".tditem"
       e = Event.new i
